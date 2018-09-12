@@ -23,7 +23,13 @@ Latency and jitter between an event in an application and an output pulse will d
     - chromebook running linux.
     - commit 55cc48c of this repository
 * Repeatedly send events using the included python script, sleeping for approximately 20ms in between. 
-* After 5,000 pulses:
-    - Pulse width: min 10.000ms, max 10.004ms, std dev 587ns
-    - Gap between pulses: min 10.173ms, max 15.929ms, std dev 92us
+* After 5,000 recorded pulses:
+    - Pulse width: 
+        - min: 10.000ms
+        - max: 10.004ms
+        - std dev: 587ns
+    - Gap between pulses: 
+        - min: 10.173ms
+        - max: 15.929ms
+        - std dev: 92us
 
