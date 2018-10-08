@@ -1,7 +1,7 @@
 // USB event marker
 //
-// Listen for single-byte event numbers over serial, and immediately output them
-// in binary as a pulse across the output pins.
+// Listen for single-byte event codes over serial, and immediately output their
+// value in binary as a pulse across the output pins.
 //
 // Compatible with the Teensy LC and Teensy 3.2 boards.
 
@@ -9,8 +9,8 @@
 // How long the pin(s) should stay high for after an event is received.
 const uint16_t pulse_milliseconds = 10;
 
-// How long to wait after the end of the pulse. This matters if a second event
-// is received before the first pulse ends - it guarantees that you'll see a gap
+// How long to pause after ending a pulse. This matters if a second event
+// is sent before the first pulse ends - it guarantees that you'll see a gap
 // between those two pulses. Note that this value is just a minimum gap time,
 // and the actual gap time will be ~6 microseconds longer.
 const uint16_t gap_microseconds = 10;
@@ -48,7 +48,7 @@ void loop(){
   if (Serial.available()) {
     // An event happened!
 
-    // Read 1 byte containing the event number and use it to set the
+    // Read 1 byte containing the event code and use it to set the
     // corresponding output pins
     set(Serial.read());
 

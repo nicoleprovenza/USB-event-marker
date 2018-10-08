@@ -19,11 +19,12 @@ seconds_between_events = 0.020 # 20 milliseconds
 # This number will be represented in binary on the output channels.
 # For example, sending 255 will cause all output channels to pulse at once.
 # Sending powers of 2 will each cause a single channels to pulse.
-event_number = 255
+event_code = 255
 
 
 def init_serial(port_name, baud_rate):
     while True:
+        # If initialization fails, try again after a few seconds.
         try:
             port = serial.Serial(port_name, baud_rate, timeout=None)
         except serial.serialutil.SerialException as exception:
@@ -33,13 +34,12 @@ def init_serial(port_name, baud_rate):
             return port
 
 
-def send_events(event_number, seconds_between_events, port_name, baud_rate):
+def send_events(event_code, seconds_between_events, port_name, baud_rate):
     port = init_serial(port_name, baud_rate)
     while True:
-    # for _ in range(repetitions):
-        # print("sending:", event_number)
+        print("sending:", event_code)
         try:
-            port.write(bytes([event_number]))
+            port.write(bytes([event_code]))
         except serial.serialutil.SerialException as exception:
             print(exception)
             port.close()
@@ -49,4 +49,4 @@ def send_events(event_number, seconds_between_events, port_name, baud_rate):
 
 
 if __name__ == "__main__":
-    send_events(event_number, seconds_between_events, port_name, baud_rate)
+    send_events(event_code, seconds_between_events, port_name, baud_rate)
