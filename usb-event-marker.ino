@@ -5,7 +5,6 @@
 //
 // Compatible with the Teensy LC and Teensy 3.2 boards.
 
-
 // How long the pin(s) should stay high for after an event is received.
 const uint16_t pulse_milliseconds = 10;
 
@@ -20,7 +19,7 @@ const uint16_t gap_microseconds = 10;
 // sending a "1" will only pulse pin 2, and sending a "128" will only pulse pin
 // 5. Sending a "255" will pulse all pins at once.
 #define NUM_PINS 8
-const uint8_t port_d_pins[NUM_PINS] = {2,14,7,8,6,20,21,5};
+const uint8_t port_d_pins[NUM_PINS] = {2, 14, 7, 8, 6, 20, 21, 5};
 
 // Uncomment the next line to blink the LED when an event is received.
 // This might affect the marker timing very slightly.
@@ -29,13 +28,12 @@ const uint8_t port_d_pins[NUM_PINS] = {2,14,7,8,6,20,21,5};
 // The on-board LED
 const uint8_t led_pin = 13;
 
-
-void setup(){
+void setup() {
   // Set baud rate
   Serial.begin(115200);
 
   // Configure the output pins
-  for (uint8_t i = 0; i < NUM_PINS; i ++) {
+  for (uint8_t i = 0; i < NUM_PINS; i++) {
     pinMode(port_d_pins[i], OUTPUT);
   }
 
@@ -44,7 +42,7 @@ void setup(){
 #endif
 }
 
-void loop(){
+void loop() {
   if (Serial.available()) {
     // An event happened!
 
