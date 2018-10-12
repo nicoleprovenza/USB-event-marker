@@ -30,7 +30,7 @@ const uint8_t led_pin = 13;
 
 void setup() {
   // Set baud rate
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // Configure the output pins
   for (uint8_t i = 0; i < NUM_PINS; i++) {
