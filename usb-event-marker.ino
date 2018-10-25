@@ -14,19 +14,20 @@ const uint16_t pulse_milliseconds = 10;
 // and the actual gap time will be ~6 microseconds longer.
 const uint16_t gap_microseconds = 10;
 
-// The first 8 pins of PORTD, in order (on the Teensy LC / 3.2) These 8 pins
-// correspond to the 8 bits of the value received over serial. For example,
-// sending a "1" will only pulse pin 2, and sending a "128" will only pulse pin
-// 5. Sending a "255" will pulse all pins at once.
+// The first 8 pins of PORTD, in order, on the Teensy 3.2 (and Teensy LC). These
+// 8 pins correspond to the 8 bits of the value received over serial (except that some bits may be
+// modified by the ALWAYS_PULSE_MASK). For example, sending a "1"
+// will only pulse pin 2, and sending a "3" will pulse pin 2 and pin 14.
 #define NUM_PINS 8
 const uint8_t port_d_pins[NUM_PINS] = {2, 14, 7, 8, 6, 20, 21, 5};
 
-// Uncomment the next line to blink the LED when an event is received.
-// This might affect the marker timing very slightly.
-#define DEBUG_BLINK
+// Force these bits/pins to pulse anytime we output an event code, regardless of
+// the actual value of that bit in the event code. This is useful for eg. making
+// an LED flash on every event. Since 1<<7 masks the most-significant bit,
+// the max unique event code will be 127 instead of 255.
+// To disable this feature and output all 8 bits of the event code, set this mask to 0x0.
+#define ALWAYS_PULSE_MASK 0x1<<7
 
-// The on-board LED
-const uint8_t led_pin = 13;
 
 void setup() {
   // Set baud rate
@@ -36,19 +37,37 @@ void setup() {
   for (uint8_t i = 0; i < NUM_PINS; i++) {
     pinMode(port_d_pins[i], OUTPUT);
   }
-
-#ifdef DEBUG_BLINK
-  pinMode(led_pin, OUTPUT);
-#endif
 }
+
+// void debug_repeat() {
+//   uint8_t event = Serial.read();
+//   uint8_t fives = event/5;
+//   uint8_t ones = event%5;
+//   for(uint8_t i = 0; i < fives; i++) {
+//     set(event | ALWAYS_PULSE_MASK);
+//     delay(100);
+//     clear();
+//     delay(200);
+//   }
+//   for(uint8_t i = 0; i < ones; i++) {
+//     set(event | ALWAYS_PULSE_MASK);
+//     delay(10);
+//     clear();
+//     delay(200);
+//   }
+//   delay(500);
+// }
+
 
 void loop() {
   if (Serial.available()) {
     // An event happened!
 
+    // debug_repeat();
+
     // Read 1 byte containing the event code and use it to set the
-    // corresponding output pins
-    set(Serial.read());
+    // corresponding output pins.
+    set(Serial.read() | ALWAYS_PULSE_MASK);
 
     // Let the pins stay high for the length of the pulse
     delay(pulse_milliseconds);
@@ -68,17 +87,10 @@ inline void set(uint8_t value) {
   // not clear pins that were already high! You should call clear() first to do
   // that.
   GPIOD_PSOR = value;
-
-#ifdef DEBUG_BLINK
-  digitalWrite(led_pin, HIGH);
-#endif
 }
 
 inline void clear() {
   // Clear all of the first 8 pins in the port.
   GPIOD_PCOR = 0xFF;
 
-#ifdef DEBUG_BLINK
-  digitalWrite(led_pin, LOW);
-#endif
 }
