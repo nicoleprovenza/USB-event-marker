@@ -1,8 +1,9 @@
 #include "usb_names.h"
 
-// Override the product name, so the computer can tell that this device is the
-// USB Event Marker, and knows to send event codes to it (instead of
-// accidentally sending them to some other unsuspecting device...)
+// Override the Teensy 3.2's product name, so the computer can tell that this device is the
+// USB Event Marker, and will know to send event codes to it (instead of
+// accidentally sending them to some other unsuspecting device like your USB
+// keyboard...)
 //
 // See discussion here: https://forum.pjrc.com/threads/23796-How-to-change-Teensy-3-0-PRODUCT_NAME
 
