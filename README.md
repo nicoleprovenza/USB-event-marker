@@ -54,6 +54,9 @@ After installing the above requirements, add your username (`evan`) to the group
 
     sudo usermod -a -G dialout evan
 
+If this is the first time you are uploading the scipt to the teensy, copy the following file in the /etc/udev/rules.d/49-teensy.rules path.
+https://www.pjrc.com/teensy/49-teensy.rules
+
 Reboot the computer to let this change take effect.
 
 Plug the USB Event Marker device into one of the computer's USB ports and try running the example script:
